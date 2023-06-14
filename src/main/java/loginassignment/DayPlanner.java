@@ -2,7 +2,9 @@ package loginassignment;
 
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.fxml.FXMLLoader;
 import javafx.geometry.Insets;
+import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
@@ -11,12 +13,25 @@ import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
 import javafx.stage.Stage;
 
+import java.io.IOException;
 import java.util.Date;
 import java.util.Properties;
 
 public class DayPlanner {
     static TableView<DayPlannerItem> table = new TableView<DayPlannerItem>();
+
+
     public static void EnableDayPlannerMenu() {
+
+        Parent root = null;
+
+        try {
+            root = FXMLLoader.load(DayPlanner.class.getResource("/dayplanner.fxml"));
+        } catch (IOException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+
         Label header = new Label("Day Planner");
         header.setStyle("-fx-font-size: 25px;");
 
@@ -62,7 +77,7 @@ public class DayPlanner {
        // gridPane.setStyle("-fx-font-size: 14px; -fx-background-color: grey;");
 
 
-        Scene scene = new Scene(pane, 600, 470);
+        Scene scene = new Scene(root, 600, 470);
         Stage stage = new Stage();
         stage.setTitle("Day Planner");
         stage.setScene(scene);
