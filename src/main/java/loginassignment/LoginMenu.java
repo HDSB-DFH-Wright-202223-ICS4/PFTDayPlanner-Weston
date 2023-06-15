@@ -7,6 +7,7 @@ import javafx.scene.control.*;
 import javafx.scene.layout.GridPane;
 import javafx.stage.Stage;
 
+import java.io.IOException;
 import java.util.Objects;
 
 public class LoginMenu extends Application {
@@ -48,7 +49,13 @@ public class LoginMenu extends Application {
 
         ReadData.UpdateSavedInfo();
 
-        submitButton.setOnAction(e -> onSubmit());
+        submitButton.setOnAction(e -> {
+            try {
+                onSubmit();
+            } catch (IOException ex) {
+                throw new RuntimeException(ex);
+            }
+        });
         createAccountButton.setOnAction(e -> RegisterMenu.EnableRegisterMenu());
 
         GridPane gridPane = new GridPane();
@@ -71,7 +78,7 @@ public class LoginMenu extends Application {
         primaryStage.show();
     }
 
-    private void onSubmit() {
+    private void onSubmit() throws IOException {
         String username = usernameField.getText();
         String password = passwordField.getText();
 
