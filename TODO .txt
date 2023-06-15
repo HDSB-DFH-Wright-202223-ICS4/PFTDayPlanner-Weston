@@ -1,0 +1,7 @@
+Read Date & Text input fields contents, to
+determine what the item your adding's contents are
+
+Figure out how to add a new item to list with contained
+data.
+
+Figure out how to use the remove button to remove selected field.

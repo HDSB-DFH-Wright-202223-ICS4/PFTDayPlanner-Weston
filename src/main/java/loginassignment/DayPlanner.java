@@ -23,25 +23,34 @@ import java.util.Objects;
 
 import java.io.IOException;
 import java.net.URL;
+import javafx.event.ActionEvent;
 
 import static javafx.application.Application.launch;
 
 public class DayPlanner extends Application {
     static TableView<DayPlannerItem> table = new TableView<DayPlannerItem>();
 
+    @FXML private TextField stringTextField;
 
+    @FXML private DatePicker datePickerField;
+    @FXML private TableView mainTableView;
+
+    @FXML private TableColumn textColumn;
 
 
     @FXML
     private void AddNewElement(ActionEvent event)
     {
         event.consume();
-        System.out.println("Hi");
+        System.out.println(stringTextField.getText());
+        //System.out.println(datePickerField.getAccessibleText());
+        mainTableView.getItems().add(new DayPlannerItem(stringTextField.getText(), 0, false));
+        textColumn.setCellValueFactory(new PropertyValueFactory<>("text"));
     }
 
     public static void EnableDayPlannerMenu() throws IOException {
         FXMLLoader loader = new FXMLLoader();
-        loader.setLocation(new URL("file:///C:/FXML/dayplanner.fxml")); //MUST BE IN FOLDER
+        loader.setLocation(new URL("file:///C:/FXML/dayplanner.fxml")); //MUST BE IN CORRECT FOLDER
 
         VBox vbox = loader.<VBox>load();
 
@@ -54,6 +63,11 @@ public class DayPlanner extends Application {
     private static void AddEntry(DayPlannerItem entry)
     {
         table.getItems().add(entry);
+    }
+
+    private static String RetrieveText()
+    {//This will retrieve the text from the main input field.
+        return "";
     }
 
 
