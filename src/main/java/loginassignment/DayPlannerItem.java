@@ -1,17 +1,19 @@
 package loginassignment;
 
+import java.util.Date;
+
 public class DayPlannerItem {
         public String text;
-        public int date;
+        public String date;
         public boolean completeCheck;
 
         public DayPlannerItem()
         {
             this.text = "";
-            this.date = 0;
+            this.date = new String();
             this.completeCheck = false;
         }
-        public DayPlannerItem(String Text, int Date, boolean CompleteCheck) {
+        public DayPlannerItem(String Text, String Date, boolean CompleteCheck) {
             this.text = Text;
             this.date = Date;
             this.completeCheck = CompleteCheck;
@@ -27,12 +29,12 @@ public class DayPlannerItem {
             this.text = text;
         }
 
-        public int getDate()
+        public String getDate()
         {
             return date;
         }
 
-        public void setDate(int date)
+        public void setDate(String date)
         {
             this.date = date;
         }

@@ -28,24 +28,27 @@ import javafx.event.ActionEvent;
 import static javafx.application.Application.launch;
 
 public class DayPlanner extends Application {
-    static TableView<DayPlannerItem> table = new TableView<DayPlannerItem>();
 
-    @FXML private TextField stringTextField;
+    @FXML private TextField stringTextField; //Used to grab the string from the text field.
+    @FXML private DatePicker datePickerField;//Used to grab the date (converted to string) from text field.
 
-    @FXML private DatePicker datePickerField;
-    @FXML private TableView mainTableView;
-
-    @FXML private TableColumn textColumn;
+    @FXML private TableView mainTableView; //Used to add new entries.
+    @FXML private TableColumn textColumn; //Used to update the field's data.
+    @FXML private TableColumn dateColumn; //Used to update the field's data as well.
 
 
     @FXML
     private void AddNewElement(ActionEvent event)
     {
         event.consume();
-        System.out.println(stringTextField.getText());
-        //System.out.println(datePickerField.getAccessibleText());
-        mainTableView.getItems().add(new DayPlannerItem(stringTextField.getText(), 0, false));
-        textColumn.setCellValueFactory(new PropertyValueFactory<>("text"));
+        System.out.println(CanSubmitNewField());
+        if(CanSubmitNewField() == true) {
+            AddEntry(new DayPlannerItem(RetrieveText(), datePickerField.getValue().toString(), false));
+        }else
+        {
+            Alert alert = new Alert(Alert.AlertType.WARNING, "All fields need to be populated.", ButtonType.OK);
+            alert.show();
+        }
     }
 
     public static void EnableDayPlannerMenu() throws IOException {
@@ -60,14 +63,27 @@ public class DayPlanner extends Application {
         stage.show();
     }
 
-    private static void AddEntry(DayPlannerItem entry)
+    private void AddEntry(DayPlannerItem entry)
     {
-        table.getItems().add(entry);
+        mainTableView.getItems().add(entry);
+        textColumn.setCellValueFactory(new PropertyValueFactory<>("text"));
+        dateColumn.setCellValueFactory(new PropertyValueFactory<>("date"));
     }
 
-    private static String RetrieveText()
+    private Boolean CanSubmitNewField()
+    {
+        if(stringTextField.getText().length() > 0 && datePickerField.getValue().toString().length() > 0) {
+            return true;
+        }
+        else {
+            return false;
+        }
+    }
+
+
+    private String RetrieveText()
     {//This will retrieve the text from the main input field.
-        return "";
+        return stringTextField.getText();
     }
 
 
