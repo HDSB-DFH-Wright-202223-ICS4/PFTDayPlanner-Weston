@@ -17,7 +17,6 @@ public class DayPlanner extends Application {
 
     @FXML private TextField stringTextField; //Used to grab the string from the text field.
     @FXML private DatePicker datePickerField;//Used to grab the date (converted to string) from text field.
-
     @FXML private ChoiceBox importancePickerField; //Used to grab the selected importance (and to add the types to it)
 
 
@@ -30,35 +29,54 @@ public class DayPlanner extends Application {
     @FXML
     public void initialize()
     {//This is called when the FXML VBox is launched.
-        AddItems();
+        AddItemsToImportancePicker();
         //DayPlannerSaveLoader.ReadDate();
     }
 
     @FXML
-    private void AddNewElement(ActionEvent event)
-    { //This is directly attached to the 'Add New' Button in the FMXL scene by the #name.
+    private void AddNewElement(ActionEvent event) throws IOException { //This is directly attached to the 'Add New' Button in the FMXL scene by the #name.
         event.consume();
         System.out.println(CanSubmitNewField());
-        if(CanSubmitNewField() == true) { //If you meet the proper requirements to add to the list.
-            AddEntry(new DayPlannerItem(RetrieveText(), datePickerField.getValue().toString(), importancePickerField.getSelectionModel().getSelectedItem().toString()));
-            System.out.println(importancePickerField.getSelectionModel().getSelectedItem().toString());
-        }else
-        {//Isn't catching the DatePicker being unchosen so there's an alternative try/catch that gets it down below.
-            ShowAlert("All Fields Need To Be Populated!");
-        }
+        TryAddNewEntry();
         //DayPlannerSaveLoader.WriteData();
     }
+
+    private void TryAddNewEntry() throws IOException {
+        if(CanSubmitNewField() == true) { //If you meet the proper requirements to add to the list.
+            AddEntry(new DayPlannerItem(RetrieveText(), datePickerField.getValue().toString(), importancePickerField.getSelectionModel().getSelectedItem().toString()));
+        }else
+        {//Isn't catching the DatePicker being un-chosen so there's an alternative try/catch that gets it down below.
+            ShowAlert("All Fields Need To Be Populated!");
+        }
+
+    }
+
 
     @FXML
     private void RemoveSelectedElement(ActionEvent event)
     {//Called directly by the remove button on the FXML, removes your current selected item.
         event.consume();
         //!!Maybe do a check here if getSelectedItem() != null, and else throw up error warning popup.
-        if(mainTableView.getSelectionModel().getSelectedItem() != null)
-        mainTableView.getItems().removeAll(mainTableView.getSelectionModel().getSelectedItem());
+        if(mainTableView.getSelectionModel().getSelectedItem() != null) {
+            mainTableView.getItems().removeAll(mainTableView.getSelectionModel().getSelectedItem());
+            ItemRemoved((DayPlannerItem) mainTableView.getSelectionModel().getSelectedItem());
+        }
         else
             ShowAlert("No Item Selected!");
     }
+
+    @FXML
+    private void UpdateSelectedElement(ActionEvent event)
+    {//This replaces the data of whatever element you have currently selected with whatever new data you have entered into the text-fields.
+        event.consume();
+
+        int index = mainTableView.getSelectionModel().getSelectedIndex(); //Retrieve the current selected index.
+        mainTableView.getItems().remove(index); //Remove the item
+        mainTableView.getItems().add(index, new DayPlannerItem(RetrieveText(), datePickerField.getValue().toString(), importancePickerField.getSelectionModel().getSelectedItem().toString()));
+        //^ Re-insert the new item at the old index to appear as it's been replaced.
+        textColumn.setText("");
+    }
+
 
 
     public static void EnableDayPlannerMenu() throws IOException
@@ -76,19 +94,27 @@ public class DayPlanner extends Application {
         //DayPlanner.AddItems();
     }
 
-    public void AddItems()
-    {//This populates the Importance Picker Field (On Initialization)
-        importancePickerField.getItems().addAll("Not Important", "Barely Important", "Semi Important", "Pretty Important", "Important", "Very Important");
-        importancePickerField.getSelectionModel().select("Not Important");
+    public void AddItemsToImportancePicker()
+    {//This populates the Importance Picker Field (On Initialization), Due to it not being possible in SceneBuilder.
+        importancePickerField.getItems().addAll("Not Important", "Barely Important", "Semi Important", "Pretty Important", "Important", "Very Important"); //Populate list.
+        importancePickerField.getSelectionModel().select("Not Important");//Selects a default option
     }
 
 
-    private void AddEntry(DayPlannerItem entry)
-    { //Add new entry to the FXML UI component, then update the Cell's values to display correctly.
+    private void AddEntry(DayPlannerItem entry) throws IOException { //Add new entry to the FXML UI component, then update the Cell's values to display correctly.
         mainTableView.getItems().add(entry);
         textColumn.setCellValueFactory(new PropertyValueFactory<>("text"));
         dateColumn.setCellValueFactory(new PropertyValueFactory<>("date"));
         importanceColumn.setCellValueFactory(new PropertyValueFactory<>("importance"));
+        ItemAdded(entry);
+    }
+
+    private void ItemAdded(DayPlannerItem item) throws IOException {//This is used to add items to item list in savedata class.
+        DayPlannerSaveLoader.AddToItems(item);
+    }
+    private void ItemRemoved(DayPlannerItem item)
+    {
+        DayPlannerSaveLoader.RemoveFromItems(item);
     }
 
     private Boolean CanSubmitNewField()
