@@ -12,6 +12,8 @@ import javafx.stage.Stage;
 import javafx.application.Application;
 import java.io.IOException;
 import java.net.URL;
+import java.util.ArrayList;
+import java.util.List;
 
 public class DayPlanner extends Application {
 
@@ -26,10 +28,15 @@ public class DayPlanner extends Application {
     @FXML private TableColumn importanceColumn; //Used to update the field's data also.
 
 
+    public DayPlannerSaveLoader SaveLoader;
+
+
     @FXML
-    public void initialize()
-    {//This is called when the FXML VBox is launched.
+    public void initialize() throws IOException {//This is called when the FXML VBox is launched.
         AddItemsToImportancePicker();
+        SaveLoader = new DayPlannerSaveLoader();
+        SaveLoader.rootClass = this;
+        SaveLoader.ReadData();
         //DayPlannerSaveLoader.ReadDate();
     }
 
@@ -50,7 +57,6 @@ public class DayPlanner extends Application {
         }
 
     }
-
 
     @FXML
     private void RemoveSelectedElement(ActionEvent event)
@@ -101,7 +107,7 @@ public class DayPlanner extends Application {
     }
 
 
-    private void AddEntry(DayPlannerItem entry) throws IOException { //Add new entry to the FXML UI component, then update the Cell's values to display correctly.
+    public void AddEntry(DayPlannerItem entry) throws IOException { //Add new entry to the FXML UI component, then update the Cell's values to display correctly.
         mainTableView.getItems().add(entry);
         textColumn.setCellValueFactory(new PropertyValueFactory<>("text"));
         dateColumn.setCellValueFactory(new PropertyValueFactory<>("date"));
@@ -110,11 +116,11 @@ public class DayPlanner extends Application {
     }
 
     private void ItemAdded(DayPlannerItem item) throws IOException {//This is used to add items to item list in savedata class.
-        DayPlannerSaveLoader.AddToItems(item);
+        SaveLoader.AddToItems(item);
     }
     private void ItemRemoved(DayPlannerItem item)
     {
-        DayPlannerSaveLoader.RemoveFromItems(item);
+        SaveLoader.RemoveFromItems(item);
     }
 
     private Boolean CanSubmitNewField()
