@@ -23,9 +23,12 @@ public class DayPlannerSaveLoader {
         }
     }
 
-    public void RemoveFromItems(DayPlannerItem item)
-    {
+    public void RemoveFromItems(DayPlannerItem item) throws IOException {
         Items.remove(item);
+        FlushData(); //Clear file before adding new stuff.
+        for (DayPlannerItem dayPlannerItem : Items) {//Iterate through items.
+            WriteData(dayPlannerItem.text, dayPlannerItem.date, dayPlannerItem.importance);
+        }
     }
 
     public void ReadData() throws IOException {//The method that will read the data and then add the data to the to-do list.

@@ -59,8 +59,7 @@ public class DayPlanner extends Application {
     }
 
     @FXML
-    private void RemoveSelectedElement(ActionEvent event)
-    {//Called directly by the remove button on the FXML, removes your current selected item.
+    private void RemoveSelectedElement(ActionEvent event) throws IOException {//Called directly by the remove button on the FXML, removes your current selected item.
         event.consume();
         //!!Maybe do a check here if getSelectedItem() != null, and else throw up error warning popup.
         if(mainTableView.getSelectionModel().getSelectedItem() != null) {
@@ -118,8 +117,7 @@ public class DayPlanner extends Application {
     private void ItemAdded(DayPlannerItem item) throws IOException {//This is used to add items to item list in savedata class.
         SaveLoader.AddToItems(item);
     }
-    private void ItemRemoved(DayPlannerItem item)
-    {
+    private void ItemRemoved(DayPlannerItem item) throws IOException {
         SaveLoader.RemoveFromItems(item);
     }
 
