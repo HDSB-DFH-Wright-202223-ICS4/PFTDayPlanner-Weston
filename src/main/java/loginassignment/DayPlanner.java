@@ -27,25 +27,21 @@ public class DayPlanner extends Application {
     @FXML private TableColumn dateColumn; //Used to update the field's data as well.
     @FXML private TableColumn importanceColumn; //Used to update the field's data also.
 
-
-    public DayPlannerSaveLoader SaveLoader;
+    public DayPlannerSaveLoader SaveLoader; //This gets instantiated at initialization (To have access to methods)
 
 
     @FXML
     public void initialize() throws IOException {//This is called when the FXML VBox is launched.
-        AddItemsToImportancePicker();
-        SaveLoader = new DayPlannerSaveLoader();
-        SaveLoader.rootClass = this;
-        SaveLoader.ReadData();
-        //DayPlannerSaveLoader.ReadDate();
+        AddItemsToImportancePicker(); //Populate the importance picker dropdown.
+        SaveLoader = new DayPlannerSaveLoader(); //Create instance of save/loader class.
+        SaveLoader.rootClass = this; //The savedata class also needs a reference to this class to call methods.
+        SaveLoader.ReadData(); //Read & Update data.
     }
 
     @FXML
     private void AddNewElement(ActionEvent event) throws IOException { //This is directly attached to the 'Add New' Button in the FMXL scene by the #name.
         event.consume();
-        System.out.println(CanSubmitNewField());
         TryAddNewEntry();
-        //DayPlannerSaveLoader.WriteData();
     }
 
     private void TryAddNewEntry() throws IOException {
@@ -71,13 +67,14 @@ public class DayPlanner extends Application {
     }
 
     @FXML
-    private void UpdateSelectedElement(ActionEvent event)
-    {//This replaces the data of whatever element you have currently selected with whatever new data you have entered into the text-fields.
+    private void UpdateSelectedElement(ActionEvent event) throws IOException {//This replaces the data of whatever element you have currently selected with whatever new data you have entered into the text-fields.
         event.consume();
 
         int index = mainTableView.getSelectionModel().getSelectedIndex(); //Retrieve the current selected index.
+        ItemRemoved((DayPlannerItem) mainTableView.getSelectionModel().getSelectedItem()); //Removes the save data of that item.
         mainTableView.getItems().remove(index); //Remove the item
         mainTableView.getItems().add(index, new DayPlannerItem(RetrieveText(), datePickerField.getValue().toString(), importancePickerField.getSelectionModel().getSelectedItem().toString()));
+        ItemAdded(new DayPlannerItem(RetrieveText(), datePickerField.getValue().toString(), importancePickerField.getSelectionModel().getSelectedItem().toString())); //Re-adds save data with updated values.
         //^ Re-insert the new item at the old index to appear as it's been replaced.
         textColumn.setText("");
     }
