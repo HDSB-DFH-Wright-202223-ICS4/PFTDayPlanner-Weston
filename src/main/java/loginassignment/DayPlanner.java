@@ -21,7 +21,6 @@ public class DayPlanner extends Application {
     @FXML private DatePicker datePickerField;//Used to grab the date (converted to string) from text field.
     @FXML private ChoiceBox importancePickerField; //Used to grab the selected importance (and to add the types to it)
 
-
     @FXML private TableView mainTableView; //Used to add new entries.
     @FXML private TableColumn textColumn; //Used to update the field's data.
     @FXML private TableColumn dateColumn; //Used to update the field's data as well.
@@ -76,7 +75,6 @@ public class DayPlanner extends Application {
         mainTableView.getItems().add(index, new DayPlannerItem(RetrieveText(), datePickerField.getValue().toString(), importancePickerField.getSelectionModel().getSelectedItem().toString()));
         ItemAdded(new DayPlannerItem(RetrieveText(), datePickerField.getValue().toString(), importancePickerField.getSelectionModel().getSelectedItem().toString())); //Re-adds save data with updated values.
         //^ Re-insert the new item at the old index to appear as it's been replaced.
-        textColumn.setText("");
     }
 
 

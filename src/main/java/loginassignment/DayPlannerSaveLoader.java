@@ -37,8 +37,8 @@ public class DayPlannerSaveLoader {
 
         List<String> lines = Files.readAllLines(of, Charset.defaultCharset());
         for (String line : lines) {
-            int LineCommaIndex = 0;
-            int LastCommaIndex = 0;
+            int LineCommaIndex = 0; //Storing which horizontal iteration of the comma you're at.
+            int LastCommaIndex = 0; //Storing the index of the final comma in the string.
             String text = null;
             String date = null;
             String importance = null;

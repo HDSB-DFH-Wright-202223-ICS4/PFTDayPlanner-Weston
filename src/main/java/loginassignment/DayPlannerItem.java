@@ -10,8 +10,8 @@ public class DayPlannerItem {
         public DayPlannerItem()
         {
             this.text = "";
-            this.date = new String();
-            this.importance = new String();
+            this.date = "";
+            this.importance = "";
         }
         public DayPlannerItem(String Text, String Date, String Importance) {
             this.text = Text;
